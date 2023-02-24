@@ -17,9 +17,7 @@
 		document.location.href = ctxPath + "/home";
 	}
 </script>
-
 </head>
 <body>
-
 </body>
 </html>
