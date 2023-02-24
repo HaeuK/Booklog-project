@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booklog.dao.PostDAO">
+
+	<select id="selectPostListCount" parameterType="PostVo" resultType="int">
+		SELECT NVL(COUNT(1), 0)
+		FROM post
+		WHERE userno = #{userno}
+	</select>
+
+	<select id="selectPostList" parameterType="PostVo" resultType="PostVo">
+		<include refid="pagination.prefixPagination"/>
+		SELECT *
+		FROM post
+		WHERE userno = #{userno}
+		<include refid="pagination.orderby"/>
+		<include refid="pagination.suffixPagination"/>
+	</select>
+	
+	<select id="selectPost" parameterType="PostVo" resultType="PostVo">
+		SELECT
+			a.postno,
+			a.postkey,
+			b.usernickname AS userno,
+			a.bookcaseno,
+			a.isbn,
+			a.booktitle,
+			a.bookauthor,
+			a.bookcover,
+			a.bookcontent,
+			a.rate,
+			a.posttitle,
+			a.periodstart,
+			a.periodfinish,
+			a.postcontent1,
+			a.postcontent2,
+			a.postcontent2page,
+			a.postcontent3,
+			a.postlikecount,
+			a.postwritedate
+		FROM post a
+		INNER JOIN members b
+			ON a.userno = b.userno
+		WHERE a.postno = #{postno}
+	</select>
+
+	<!-- insert 영역 -->
+	<insert id="insertPost" parameterType="PostVo">
+		INSERT INTO post
+			(postno, postkey, userno, bookcaseno, isbn, booktitle, bookauthor, 
+			bookcover, bookcontent, rate, posttitle, periodstart, periodfinish, 
+			postcontent2, postcontent2page, postcontent3, 
+			postlikecount, postwritedate, postcontent1)
+		VALUES
+			(postno_seq.nextval, #{postkey}, #{userno}, #{bookcaseno}, #{isbn}, #{booktitle}, #{bookauthor}, 
+			#{bookcover}, #{bookcontent}, #{rate}, #{posttitle}, #{periodstart}, #{periodfinish}, 
+			#{postcontent2}, #{postcontent2page}, #{postcontent3}, 
+			0, SYSDATE, #{postcontent1})
+	</insert>
+	
+	<!-- update 영역 -->
+	<update id="updatePost" parameterType="PostVo">
+		UPDATE post
+		SET
+			rate = #{rate},
+			posttitle = #{posttitle},
+			periodstart = #{periodstart},
+			periodfinish = #{periodfinish},
+			postcontent1 = #{postcontent1},
+			postcontent2 = #{postcontent2},
+			postcontent2page = #{postcontent2page},
+			postcontent3 = #{postcontent3}
+		WHERE postno = #{postno}
+	</update>
+	
+	<!-- delete 영역 -->
+	<delete id="deletePost" parameterType="PostVo">
+		DELETE FROM post
+		WHERE postno = #{postno}
+	</delete>
+
+<!-- 여기까지 yo -->
+
+
+<!-- 포스트 홈 최신순 10개까지 출력 -->
+<select id="postSubhome" parameterType="com.vos.web.PostVo" resultType="PostVo">
+	<![CDATA[
+		SELECT bookcover,posttitle,postwritedate,postno
+		From (SELECT * FROM post ORDER BY postwritedate DESC)
+		WHERE ROWNUM <= 10
+	]]>
+		<!-- SELECT
+		    a.posttitle,
+		    b.usernickname
+		FROM post a
+		INNER JOIN members b
+		    ON a.usernickname = b.usernickname
+		WHERE ROWNUM <= 10
+		ORDER BY a.postwritedate DESC -->
+</select>
+
+<!-- 포스트에 들어갔을 때 내가 이 포스트 좋아요를 눌렀는지 확인  --> 
+<select id="selectPostlike" parameterType="com.vos.web.PostVo" resultType="int">
+	SELECT COUNT(*)
+	FROM postlike
+	WHERE likinguser = #{userno} AND likedpost = #{postno}	
+</select>
+
+<!-- 포스트의 좋아요 수를 표시  --> 
+<select id="selectPostlikeCount" parameterType="com.vos.web.PostVo" resultType="int">
+	SELECT COUNT(*)
+	FROM postlike
+	WHERE likedpost = #{postno}	
+</select>
+
+ <!-- 글쓰기 눌렀을 때 임시 저장 포스트를 불러올지 --> 
+<select id="selectTemppostById" parameterType="com.vos.web.PostVo">
+	SELECT *
+	FROM temp_post
+	WHERE userno = #{userno}
+</select>
+
+<!-- <insert id="insertPost" parameterType="com.vos.web.PostVo">
+	INSERT INTO post 
+		(postno, userno, bookcaseno, isbn, bookcover, rate, posttitle, periodstart, periodfinish,
+		postcontent1, postcontent2, postcontent2page, postcontent3, postwritedate)
+		VALUES 
+		(postno_seq.nextval, #{userno}, #{userno}, #{isbn}, #{bookcover}, #{rate}, #{posttitle}, #{periodstart}, #{periodfinish}, #{postcontent1}, #{postcontent2}, #{postcontent2page}, 
+		#{postcontent3}, systimestamp)
+		INSERT INTO post 
+			(postno, userno, bookcaseno, isbn, bookcover, rate, posttitle, periodstart, 
+			periodfinish, postcontent1, postcontent2, postcontent2page, postcontent3)
+		VALUES (postno_seq.nextval, #{userno}, #{userno}, #{isbn}, #{bookcover}, #{rate}, #{posttitle}, #{periodstart}, 
+			#{periodfinish}, #{postcontent1}, #{postcontent2}, #{postcontent2page}, #{postcontent3})
+</insert> -->
+
+ <insert id="insertTemppost" parameterType="com.vos.web.PostVo" >
+	INSERT INTO temp_post 
+		(temppostno, userno, bookcaseno, isbn, bookcover, rate, posttitle, periodstart, 
+		periodfinish, postcontent1, postcontent2, postcontent2page, postcontent3,tempsaveddate)
+	VALUES (temppsotno_seq.nextval, #{userno}, #{bookcaseno}, #{isbn}, #{bookcover}, #{rate}, #{posttitle}, #{periodstart}, 
+		#{periodfinish}, #{postcontent1}, #{postcontent2}, #{postcontent2page}, #{postcontent3}, systimestamp)
+ </insert>
+ 
+<!--  <update id="updatePost" parameterType="com.vos.web.PostVo">
+ 	UPDATE post
+ 	SET 
+ 	    rate = #{rate}
+ 	    posttitle = #{posttitle}
+ 	    periodstart = #{periodstart}
+		periodfinish = #{periodfinish}
+		postcontent1 = #{postcontent1}
+		postcontent2 = #{postcontent2}
+		postcontent2page = #{postcontent2page}
+		postcontent3 = #{postcontent3}
+ </update> -->
+ 
+ <update id="updateTemppost" parameterType="com.vos.web.PostVo">
+ 	UPDATE temp_post
+ 	SET 
+ 	    rate = #{rate}
+ 	    posttitle = #{posttitle}
+ 	    periodstart = #{periodstart}
+		periodfinish = #{periodfinish}
+		postcontent1 = #{postcontent1}
+		postcontent2 = #{postcontent2}
+		postcontent2page = #{postcontent2page}
+		postcontent3 = #{postcontent3}
+		tempsaveddate = systimestamp
+ </update>
+
+<!-- <delete id="deletePost" parameterType="com.vos.web.PostVo" >
+	DELETE post
+	WHERE postno = #{postno}
+</delete> -->
+
+<delete id="deleteTemppost" parameterType="com.vos.web.PostVo" >
+	DELETE temp_post
+	WHERE temppostno = #{temppostno}
+</delete>
+
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="false" />
+        <setting name="useGeneratedKeys" value="true" />
+        <setting name="defaultExecutorType" value="REUSE" />
+		<setting name="jdbcTypeForNull" value="NULL" />
+    </settings>
+     
+    <!-- 별명 -->
+    <typeAliases>
+        <typeAlias alias="hashMap" type="java.util.HashMap" />
+        <typeAlias alias="String" type="java.lang.String" />
+        <typeAlias alias="int" type="java.lang.Integer" />
+		<typeAlias alias="Double" type="java.lang.Double" />
+		
+		<typeAlias alias="MemberVo" type="com.vos.web.MemberVo" />
+		<typeAlias alias="NoticeVo" type="com.vos.web.NoticeVo" />
+		<typeAlias alias="CommonVo" type="com.vos.web.CommonVo" />
+		
+		<typeAlias alias="QnaVO" type="com.vos.web.QnaVO" />
+		<typeAlias alias="QnaCodeVo" type="com.vos.web.QnaCodeVo"/>
+		<typeAlias alias="QnaReplyVo" type="com.vos.web.QnaReplyVo"/>
+		<typeAlias alias="SearchedPostDTO" type="com.vos.web.SearchedPostDTO"/>
+		<typeAlias alias="ApiDTO" type="com.vos.web.ApiDTO"/>
+		<typeAlias alias="PostVo" type="com.vos.web.PostVo" />
+    </typeAliases>
+
+</configuration>

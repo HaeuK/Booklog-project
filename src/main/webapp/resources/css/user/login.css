@@ -1,0 +1,60 @@
+*{
+	/* background-color: #f6eee9; */
+	font-family: 'NanumSquareNeoBold';
+}
+
+body{
+	overflow: hidden;
+}
+
+.form-group label{
+	font-size: 0.8rem;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+
+hr{
+	width: 300px;
+	border-bottom: 1px solid #BEB5B1;
+}
+
+.container{
+	margin-top: 100px;
+}
+
+.text-link {
+	font-size: 0.8rem;
+	text-decoration: none;
+	color: #000;
+}
+.text-link:hover {
+	text-decoration: underline;
+	color: #000;
+}
+
+.btn{
+	font-family: 'NanumSquareNeoExtraBold';
+	cursor: pointer;
+}
+
+.find_info{
+	margin-top: 20px;
+	text-align:center;
+	font-size: 1rem;
+    color: #BEB5B1;
+    margin-bottom: 30px;
+}
+
+ a:link{
+    color: #BEB5B1;
+    text-decoration: none;
+}
+ a:visited{
+    color: #BEB5B1;
+    text-decoration: none;
+}
+ a:hover{
+    cursor: pointer;
+    text-decoration: underline !important;
+    color: #5e6360 !important;
+}

@@ -1,0 +1,97 @@
+/* 관리자 페이지 css */
+
+.wrap {
+	 display:flex; 
+	 justify-content: center;
+	 align-content: center;"
+}
+
+
+.ul-height {
+    list-style: none;
+    margin: 0%;
+    padding: 0%;
+    
+    line-height: 2em;
+
+    align-content: center;
+    justify-content: center;
+}
+
+.ul-height > li {
+    line-height: 2em;
+
+    width: 200px;
+    
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    
+    align-content: center;
+    justify-content: center;
+    
+}
+
+.button-custom {
+    border: 3px solid white;
+	background-color: #005B47 !important;
+    
+    width: 200px;
+
+    padding: 7px;
+    
+    color: white !important;
+}
+
+.button-custom:hover {
+    cursor: pointer;
+    transition: 0.2s;
+    
+    color: #FFE9CF !important;
+}
+
+
+td > .btn {
+	
+	width:40px;
+	height:40px;
+
+	
+	background-image: url('/resources/images/admin/pen.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+	
+	background-color: #FFE9CF !important;
+}
+td > .btn:hover {
+	background-color: #005B47 !important;
+}
+
+.btn-submit {
+	background-color: #005B47!important;
+	color: white!important;
+}
+.btn-submit:hover {
+	filter:brightness(0.8);
+}
+
+.row > label {
+display:flex;
+/* 	flex-direction: row; */
+	
+justify-content: center;
+	
+		
+	padding: 5px;
+}
+
+
+.input-width {
+	width: 260px;
+}
+
+

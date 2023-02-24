@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booklog.dao.QnaCodeDAO">
+
+	<!-- select 영역 -->
+	<select id="selectQnaCodeList" resultType="QnaCodeVo">
+		SELECT code, code_desc
+		FROM common
+		WHERE code_group = 'QnA.QnAcode'
+	</select>
+
+	<!-- insert 영역 -->
+	
+	<!-- update 영역 -->
+	
+	<!-- delete 영역 -->
+	
+</mapper>

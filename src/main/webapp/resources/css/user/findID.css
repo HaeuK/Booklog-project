@@ -1,0 +1,26 @@
+*{
+	/* background-color: #f6eee9; */
+	font-family: 'NanumSquareNeoBold';
+	
+}
+
+body{
+	overflow: hidden;
+}
+
+.container{
+	margin-top: 50px;
+}
+
+#give_info{
+	display:none;
+	font-size: 1rem;
+	margin-top: 50px;
+	margin-bottom: 50px;
+	text-align: center;
+}
+
+.btn{
+	font-family: 'NanumSquareNeoExtraBold';
+	cursor: pointer;
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booklog.dao.ApiDAO">
+
+	<select id="getBookSearchApi" resultType="ApiDTO">
+		SELECT id, key
+		FROM apikey
+		WHERE apiname='booksearch'
+	</select>
+	
+	<select id="getPublicApi" resultType="ApiDTO">
+		SELECT key
+		FROM apikey
+		WHERE apiname='publicdata'
+	</select>
+	
+</mapper>

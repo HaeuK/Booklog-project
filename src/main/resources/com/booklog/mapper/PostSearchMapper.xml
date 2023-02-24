@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.booklog.dao.PostSearchDAO">
+	
+	
+	<select id="selectByIsbn" parameterType="String" resultType="SearchedPostDTO">
+<!--       	SELECT * 
+		FROM search_post 
+		WHERE isbn=#{value} AND POSTISDELETED LIKE 'false' -->
+		
+		SELECT p.postno,p.postkey,p.userno,m.usernickname,p.isbn,p.posttitle,p.postcontent1,p.postwritedate
+		FROM post p
+		INNER JOIN members m
+   		    ON p.userno = m.userno
+   		WHERE p.ISBN=#{value} 
+	</select>
+	
+	
+</mapper>

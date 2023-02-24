@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booklog.dao.NoticeDAO">
+
+	<!-- select 영역 -->
+	<select id="selectNoticeList" parameterType="NoticeVo" resultType="NoticeVo">
+		<include refid="pagination.prefixPagination"/>
+		SELECT
+			a.noticeno,
+			c.code_desc AS noticecode,
+			a.noticetitle,
+			b.usernickname AS noticewriter,
+			a.noticewritetime
+		FROM notice a
+		INNER JOIN members b
+			ON a.noticewriter = b.userno
+		INNER JOIN common c
+			ON a.noticecode = c.code AND c.code_group LIKE 'notice%'
+			
+		<include refid="pagination.orderby"/>
+		<include refid="pagination.suffixPagination"/>
+	</select>
+	
+	<select id="selectNoticeListCount" parameterType="NoticeVo" resultType="int">
+		SELECT NVL(COUNT(1), 0)
+		FROM notice
+	</select>
+	
+	<select id="selectNotice" parameterType="NoticeVo" resultType="NoticeVo">
+		SELECT
+			a.noticeno,
+			a.noticetitle,
+			c.code_desc AS noticecode,
+			a.noticecontent,
+			b.usernickname AS noticewriter,
+			a.noticewritetime
+		FROM notice a
+		INNER JOIN members b
+			ON a.noticewriter = b.userno
+		INNER JOIN common c
+			ON a.noticecode = c.code AND c.code_group LIKE 'notice%'
+		WHERE a.noticeno = #{noticeno}
+	</select>
+
+	<!-- insert 영역 -->
+	<insert id="insertNotice" parameterType="NoticeVo">
+		INSERT INTO notice
+		(noticeno, noticecode, noticetitle, noticecontent, noticewriter, noticewritetime)
+		VALUES
+		(noticeno_seq.nextval, #{noticecode}, #{noticetitle}, #{noticecontent}, #{noticewriter}, SYSDATE)
+	</insert>
+	
+	<!-- update 영역 -->
+	<update id="updateNotice" parameterType="NoticeVo">
+		UPDATE notice
+		SET
+			noticetitle = #{noticetitle},
+			noticecode = #{noticecode},
+			noticecontent = #{noticecontent}
+		WHERE noticeno = #{noticeno}
+	</update>
+	
+	<!-- delete 영역 -->
+	<delete id="deleteNotice" parameterType="NoticeVo">
+		DELETE FROM notice
+		WHERE noticeno = #{noticeno}
+	</delete>
+	
+</mapper>

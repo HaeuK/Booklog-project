@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booklog.dao.MemberDAO">
+
+	<!-- select 영역 -->
+	<select id="selectAllMember" resultType="MemberVo">
+		SELECT *
+		FROM members
+	</select>
+	
+	<select id="selectMember" parameterType="MemberVo" resultType="MemberVo">
+		SELECT *
+		FROM members
+		WHERE userid = #{userid}
+		AND userpassword = #{userpassword}
+	</select>
+	
+	<!-- 회원번호  -->
+	<select id="selectMemberNo" parameterType="MemberVo" resultType="MemberVo">
+		SELECT *
+		FROM members
+		WHERE userno = #{userno}
+	</select>
+	
+	<select id="selectMemberIsExist" parameterType="MemberVo" resultType="MemberVo">
+		SELECT *
+		FROM members
+		WHERE userid = #{userid}
+	</select>
+	
+	<select id="selectMemberByEmail" parameterType="MemberVo" resultType="MemberVo">
+		SELECT *
+		FROM members
+		WHERE useremail=#{useremail}
+	</select>
+	
+	<select id="selectMemberByIdAndEmail" parameterType="MemberVo" resultType="MemberVo">
+		SELECT *
+		FROM members
+		WHERE userid = #{userid}
+		AND useremail=#{useremail}
+	</select>
+
+	<!-- insert 영역 -->
+	<insert id="insertMember" parameterType="MemberVo">
+		INSERT INTO members
+		(userno, userid, userpassword, usernickname, useremail)
+		VALUES
+		(userno_seq.nextval, #{userid}, #{userpassword}, #{usernickname,}, #{useremail})
+	</insert>
+	<!-- null 값을 허용하려면 매핑되는 값 뒤에 jdbcType = 타입 -->
+	
+	<update id="updateMember" parameterType="MemberVo">
+		UPDATE members
+		SET
+			userpassword = #{userpassword},
+			usernickname = #{usernickname},
+			useremail = #{useremail}
+		WHERE userno = #{userno}	
+	</update>
+	
+	<!-- 관리자 화면에서 변경 가능한 값 (권한, 아이디, 비밀번호, 닉네임, 이메일) -->
+	<update id="updateMemberByAdmin" parameterType="MemberVo">
+		UPDATE members
+		SET
+			userrole = #{userrole},
+			userid = #{userid},
+			userpassword = #{userpassword},
+			usernickname = #{usernickname},
+			useremail = #{useremail}
+		WHERE userno = #{userno}
+	</update>
+	
+	<delete id="deleteMember" parameterType="MemberVo">
+	    DELETE FROM members
+	    WHERE userno = #{userno}
+	</delete>
+	
+</mapper>

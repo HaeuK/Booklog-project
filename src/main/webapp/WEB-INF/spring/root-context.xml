@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+<!-- 		<property name="driverClassName" -->
+<!-- 			value="oracle.jdbc.driver.OracleDriver"></property> -->
+<!-- 		<property name="jdbcUrl" -->
+<!-- 			value="jdbc:oracle:thin:@localhost:1521:BOOKLOG"></property> -->
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<property name="jdbcUrl"
+			value="jdbc:log4jdbc:oracle:thin:@43.201.25.153:1521:XE"></property>
+		<property name="username" value="booklog"></property>
+		<property name="password" value="booklog"></property>
+	</bean>
+	
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="mapperLocations" value="classpath:com/booklog/mapper/*Mapper.xml"></property>
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property>
+	</bean>
+	
+	<!--메일 인증 빈 등록 -->
+	<!-- naver 계정 설정 -->
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- <property name="host" value="smtp.naver.com" /> --> <!-- 메일서버 호스트 -->
+		<property name="host" value="smtp.naver.com" /> <!-- 메일서버 호스트 -->
+		<property name="port" value="587" /> <!-- 메일서버 포트번호 -->
+		<property name="username" value="id" /> <!-- 이메일 아이디 -->
+		<property name="password" value="password" /> <!-- 비밀번호 -->
+		<!-- 이메일 아이디와 비밀번호를 입력해야 기능이 정상실행 -->
+		<!-- 이메일 계정의 smtp 설정과 포트번호 확인  -->
+		
+		<!-- 보안연결 SSL과 관련된 설정 -->
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtps.ssl.checkserveridentity">true</prop>
+				<prop key="mail.smtps.ssl.trust">*</prop>
+				<prop key="mail.debug">true</prop>
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+			</props>
+		</property>
+	</bean>
+	<!--  오류 발생시 java.security 파일의  
+			jdk.tls.disabledAlgorithms=SSLv3, TLSv1.0, TLSv1.1, RC4, DES, MD5withRSA, \
+			DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL, \
+			include jdk.disabled.namedCurves
+			부분을
+			jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \
+			DH keySize < 1024, EC keySize < 224, 3DES_EDE_CBC, anon, NULL, \
+			include jdk.disabled.namedCurves 으로 변경 -->
+
+	
+	<mybatis-spring:scan base-package="com.booklog.dao"/>
+	
+	<context:component-scan base-package="com.booklog"></context:component-scan>
+</beans>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booklog.dao.QnaDAO">
+
+	<!-- select 영역 -->
+	<!--리스트 -->
+<!--  	<select id="selectQnaList" resultType="QnaVO">
+        SELECT a.qnano,a.qnacode, a.qnareplycount,a.qnatitle,b.usernickname as qnawriter,a.qnawritetime, a.qnaisdeleted
+ 		FROM qna a
+ 		INNER JOIN members b
+ 			ON a.qnawriter = b.userno
+ 		WHERE a.qnaisdeleted LIKE 'false';
+	</select>  -->
+	<!-- 페이징 버전 리스트 -->
+	<select id="selectQnaListPaging" resultType="QnaVO">
+    
+    <![CDATA[
+     SELECT qnano, qnacode, qnatitle, qnapassword, qnacontent, qnawriter, qnawriternickname, qnaispublic, qnareplycount, qnawritetime ,qnaisdeleted FROM(  
+           SELECT row_number() over (order by qnano desc) as seqnum, A.qnano,C.code_desc as qnacode, A.qnatitle, A.qnapassword, A.qnacontent,A.qnawriter,A.qnawriternickname, 
+                     A.qnaispublic, A.qnareplycount, A.qnawritetime, A.qnaisdeleted
+           FROM qna A
+               INNER JOIN COMMON C
+                ON A.qnacode = C.code AND C.code_group like 'QnA.QnAcode'
+           WHERE A.qnaisdeleted like 'false' 
+           ) 
+       WHERE  seqnum BETWEEN (#{pageNum} -1) * #{amount}+1  and #{pageNum} * #{amount} 
+       ORDER BY qnano desc
+    ]]>
+    </select>
+    
+    
+    <!-- 페이징을 위한 total 게시물 수 확인 -->
+    
+    <select id="getTotal" resultType="int">
+    	SELECT count(*) 
+    	FROM qna
+    	WHERE qnaisdeleted like 'false' 
+    </select>
+	
+	<!-- 상세 게시글 보기 -->
+	<select id="selectQna" parameterType="QnaVO" resultType="QnaVO">
+		SELECT *
+		FROM qna
+		WHERE qnano = #{qnaNo} 	
+	</select>
+	<!-- 비밀게시글 비밀번호 확인 -->
+	<select id="selectQnaWithPassword" parameterType="QnaVO" resultType="QnaVO">
+		SELECT *
+		FROM qna
+		WHERE qnano =#{qnaNo} AND qnapassword= #{qnaPassword} 	
+	</select>
+	<!-- insert 영역 -->
+	<insert id="insertQna" parameterType="QnaVO" >
+		INSERT INTO qna
+		(qnano,qnacode,qnatitle,qnapassword,qnacontent,qnawriter,qnawriternickname,qnaispublic,qnawritetime,qnareplycount)
+		VALUES(qnano_seq.nextval,#{qnaCode},#{qnaTitle},#{qnaPassword},#{qnaContent},#{qnaWriter},#{qnaWriterNickname},#{qnaIsPublic},SYSDATE,#{qnaReplyCount})
+	</insert>
+	<!-- update 영역 -->
+	<update id="updateQna" parameterType="QnaVO">
+		UPDATE qna
+		SET qnatitle = #{qnaTitle},qnacode = #{qnaCode},qnacontent = #{qnaContent},qnaispublic = #{qnaIsPublic},qnapassword =#{qnaPassword}
+		WHERE qnano = #{qnaNo}
+	</update>
+	<!-- delete 영역 -->
+	<update id="deleteQna" parameterType="QnaVO">
+		UPDATE qna
+		SET qnaisdeleted = 'true'
+		WHERE qnano = #{qnaNo}
+	</update>
+	
+</mapper>

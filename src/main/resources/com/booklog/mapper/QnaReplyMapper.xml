@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.booklog.dao.QnaReplyDAO">
+
+	<!-- select 영역 -->
+	<select id="selectQnaReplyList" parameterType="QnaVO" resultType="QnaReplyVo">
+ 		SELECT *
+ 		FROM qnareply
+ 		WHERE qnano= #{qnaNo} AND qnareplyisdeleted LIKE 'false' 
+	</select> 
+	<!-- insert 영역 -->
+	<insert id="insertQnaReply" parameterType="QnaReplyVo">
+		INSERT INTO qnareply
+		(qnareplyno,qnano,qnareplywriter,qnareplycontent)
+		VALUES(qnareplyno_seq.nextval,#{qnaNo},1,#{qnaReplyContent})
+	</insert>
+	<!-- delete 영역 -->
+	<update id="deleteQnaReply" parameterType="QnaReplyVo">
+		UPDATE qnareply
+		SET qnareplyisdeleted = 'true'
+		WHERE qnareplyno = #{qnaReplyNo}
+	</update>
+	
+</mapper>

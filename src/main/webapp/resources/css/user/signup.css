@@ -1,0 +1,52 @@
+*{
+	/* background-color: #f6eee9; */
+	font-family: 'NanumSquareNeoBold';
+}
+
+body{
+	overflow: hidden;
+}
+
+#agreement_signup{
+	font-family:'NanumSquareNeo'; 
+    display: block;
+    text-align:center;
+}
+
+#agreementcontent{
+	background-color:white;
+    margin: auto;
+    border: 1px solid black;
+    width: 500px;
+    height: 300px;
+    padding: 20px 50px;
+    overflow: auto;
+    font-size: 1.0em;
+    text-align: justify;
+    line-height: 1.2em;
+}
+#agreementcontent p{
+	background-color:white;
+}
+	
+
+input#agreementchk{
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 30px;
+}
+
+#signup{
+	display:none;
+}
+
+.btn{
+	font-family: 'NanumSquareNeoExtraBold';
+	cursor: pointer;
+}
+
+.form-group label{
+	font-size: 0.8rem;
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
